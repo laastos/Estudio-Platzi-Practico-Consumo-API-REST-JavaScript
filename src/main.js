@@ -30,6 +30,8 @@ const API_ENDPOINTS = {
   ].join('')
 };
 
+const GENRE_DATA = {};
+
 const getTrendingMoviesPreview = async (mediaType, timeWindow) => {
   /*
   // Usando fetch
@@ -39,7 +41,8 @@ const getTrendingMoviesPreview = async (mediaType, timeWindow) => {
   const { data } = await API_AXIOS(`/trending/${mediaType}/${timeWindow}`);
   const movies = data.results;
 
-  const trendingPreviewMoviesContainer = document.querySelector('#trendingPreview .trendingPreview-movieList');
+  //const trendingPreviewMoviesContainer = document.querySelector('#trendingPreview .trendingPreview-movieList');
+  trendingMoviesPreviewList.innerHTML = '';
   movies.forEach(movie => {
     const movieContainer = document.createElement('div');
     movieContainer.classList.add('movie-container');
@@ -48,7 +51,7 @@ const getTrendingMoviesPreview = async (mediaType, timeWindow) => {
     movieImg.setAttribute('alt', movie.title);
     movieImg.setAttribute('src', API_ENDPOINTS.IMAGE(300, movie.poster_path));
     movieContainer.appendChild(movieImg);
-    trendingPreviewMoviesContainer.appendChild(movieContainer);
+    trendingMoviesPreviewList.appendChild(movieContainer);
   });
 }
 
@@ -61,21 +64,45 @@ const getCategoriesPreview = async (mediaType) => {
   const { data } = await API_AXIOS(`/genre/${mediaType}/list`);
   const categories = data.genres;
 
-  const previewCategoriesContainer = document.querySelector('#categoriesPreview .categoriesPreview-list');
+  //const previewCategoriesContainer = document.querySelector('#categoriesPreview .categoriesPreview-list');
+  categoriesPreviewList.innerHTML = '';
   categories.forEach(category => {
     const categoryContainer = document.createElement('div');
     categoryContainer.classList.add('category-container');
     const categoryTitle = document.createElement('h3');
     categoryTitle.classList.add('category-title');
     categoryTitle.setAttribute('id', `id${category.id}`);
+    categoryTitle.addEventListener('click', () => {
+      location.hash = `#category=${category.id}-${category.name.toLowerCase()}`;
+    });
     const categoryTitleText = document.createTextNode(category.name);
     categoryTitle.appendChild(categoryTitleText);
     categoryContainer.appendChild(categoryTitle);
-    previewCategoriesContainer.appendChild(categoryContainer);
+    categoriesPreviewList.appendChild(categoryContainer);
+    // Load GENRE_DATA Objet
+    if (Object.keys(GENRE_DATA).length < categories.length) {
+      GENRE_DATA[category.id] = category.name;
+    }
   });
 }
 
-window.onload = () => {
-  getTrendingMoviesPreview('movie', 'day');
-  getCategoriesPreview('movie');
+const getMoviesByCategory = async (categoryId) => {
+  const { data } = await API_AXIOS(`/discover/movie`, {
+    params: {
+      'with_genres': categoryId,
+    }
+  });
+  const movies = data.results;
+
+  genericList.innerHTML = '';
+  movies.forEach(movie => {
+    const movieContainer = document.createElement('div');
+    movieContainer.classList.add('movie-container');
+    const movieImg = document.createElement('img');
+    movieImg.classList.add('movie-img');
+    movieImg.setAttribute('alt', movie.title);
+    movieImg.setAttribute('src', API_ENDPOINTS.IMAGE(300, movie.poster_path));
+    movieContainer.appendChild(movieImg);
+    genericList.appendChild(movieContainer);
+  });
 }
