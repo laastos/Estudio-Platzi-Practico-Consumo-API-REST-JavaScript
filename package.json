@@ -1,0 +1,19 @@
+{
+  "name": "estudio-platzi-practico-consumo-api-rest-javascript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laastos/Estudio-Platzi-Practico-Consumo-API-REST-JavaScript.git"
+  },
+  "author": "Libardo Arturo Arroyave Bustos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/laastos/Estudio-Platzi-Practico-Consumo-API-REST-JavaScript/issues"
+  },
+  "homepage": "https://github.com/laastos/Estudio-Platzi-Practico-Consumo-API-REST-JavaScript#readme"
+}
